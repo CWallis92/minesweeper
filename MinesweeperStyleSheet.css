@@ -1,0 +1,153 @@
+.hide{
+	display: none !IMPORTANT;
+}
+#mainTitle{
+	color: blue;
+	margin: 25px auto 5px;
+	font-family: 'Beth Ellen', cursive;
+}
+#diffButtons{
+	width: 300px;
+	max-width: 100vw;
+	margin: auto;
+}
+#diffButtons button:not(.btn-info){
+	width: 30%;
+}
+#diffButtons button.btn-info{
+	width: 100%;
+}
+#flagsCounting, #timer{
+	text-align: center;
+	margin: 10px auto;
+}
+#gameGrid{
+	margin: auto;
+	border: 2px solid gray;
+	background-color: lightgray;
+	display: table;
+}
+#gameGrid > tr{
+	display: flex;
+}
+.easyGrid{
+	width: 180px;
+}
+.mediumGrid{
+	width: 320px;
+}
+.hardGrid{
+	width: 600px;
+}
+.mineButton{
+	height: 20px;
+	width: 20px;
+	border-radius: 2px;
+	background-color: darkgray;
+}
+.flagged{
+	background: url(http://www.jsingler.de/apps/luckysweeper/flag.svg.png);
+	background-size: 17px;
+	background-color: darkgray;
+	height: 20px;
+	width: 20px;
+}
+.qMark{
+	background: url(http://images.clipartpanda.com/purple-question-mark-clip-art-yTkeBkkLc.png);
+	background-size: 16px;
+	background-color: darkgray;
+}
+.clicked{
+	background-color: transparent;
+	width: 18px;
+	height: 18px;
+	border: 1px solid gray;
+	display: flex;
+	box-sizing: initial;
+}
+.clicked > span{
+	margin: auto;
+	height: inherit;
+	line-height: 1rem;
+}
+.clicked[value='1']{
+	color: blue;
+}
+.clicked[value='2']{
+	color: green;
+}
+.clicked[value='3'], .loser{
+	color: red;
+}
+.clicked[value='4']{
+	color: darkblue;
+}
+.clicked[value='5']{
+	color: purple;
+}
+.clicked[value='6']{
+	color: teal;
+}
+.clicked[value='7']{
+	color: darkgrey;
+}
+.clicked[value='8']{
+	color: black;
+}
+.mine{
+	background: url(http://www.nordcode.eu/blog/wp-content/uploads/2015/06/Mines-Microgame-Icon-150x150.png);
+	background-size: 17px;
+	background-position: center;
+}
+#losingSquare{
+	background-color: red;
+}
+.falseFlag{
+	padding: 0px;
+	width: 20px;
+	background-color: yellow !IMPORTANT;
+}
+#winOverlayBg{
+	position: fixed;
+	z-index: 10000;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0,0,0,0.85);
+	top: 0;
+	left: 0;
+}
+#winOverlay{
+	position: fixed;
+	z-index: 10001;
+	width: 500px;
+	max-width: 95%;
+	margin: auto;
+	left: 0;
+	right: 0;
+	background-color: #343a40;
+	top: 25%;
+	border-radius: 10px;
+	padding: 1.5em;
+	text-align: center;
+	color: #fff;
+}
+#winOverlay > h1{
+	color: red;
+}
+.firework{
+	position: absolute;
+	z-index: -1;
+}
+#winOverlay .winFlag{
+	width: 150px;
+}
+#winName{
+	border-bottom-left-radius: 0.25rem;
+	border-top-left-radius: 0.25rem;
+}
+#winTime{
+	width: auto;
+	margin: auto;
+	text-align: center;
+	color: #fff !IMPORTANT;
+}
