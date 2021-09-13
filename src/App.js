@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { CssBaseline } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
 
-function App() {
+import { lightTheme, darkTheme } from "./styles/theme";
+import { Nav, GameArea } from "./components";
+
+const App = () => {
+  const [darkMode, setDarkMode] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <CssBaseline />
+      <Router>
+        <Nav darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Switch>
+          <Route exact path="/">
+            <GameArea />
+          </Route>
+          <Route exact path="/hi-scores">
+            <h1>Hello</h1>
+          </Route>
+        </Switch>
+      </Router>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
