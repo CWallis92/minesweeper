@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useHistory } from "react-router-dom";
 import {
   AppBar,
@@ -19,7 +19,12 @@ const useStyles = makeStyles({
   },
 });
 
-const Nav = ({ darkMode, setDarkMode }): React.ReactElement => {
+interface NavProps {
+  darkMode: boolean;
+  setDarkMode: Dispatch<SetStateAction<boolean>>;
+}
+
+const Nav = ({ darkMode, setDarkMode }: NavProps): React.ReactElement => {
   const classes = useStyles();
 
   let history = useHistory();
