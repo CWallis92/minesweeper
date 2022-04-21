@@ -1,15 +1,16 @@
+import React from "react";
 import { Container, Grid, Paper, Typography } from "@material-ui/core";
 
 import useStyles from "../styles/gameArea";
 
-const GameArea = () => {
+const GameArea = (): React.ReactElement => {
   const classes = useStyles();
 
   return (
     <Grid
       container
       direction="column"
-      justify="center"
+      justifyContent="center"
       component={Container}
       className={classes.root}
     >

@@ -1,3 +1,4 @@
+import React from "react";
 import { useHistory } from "react-router-dom";
 import {
   AppBar,
@@ -18,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Nav = ({ darkMode, setDarkMode }) => {
+const Nav = ({ darkMode, setDarkMode }): React.ReactElement => {
   const classes = useStyles();
 
   let history = useHistory();

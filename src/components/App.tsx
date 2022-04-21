@@ -1,12 +1,13 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 
-import { lightTheme, darkTheme } from "./styles/theme";
-import { Nav, GameArea } from "./components";
+import Nav from "./Nav";
+import GameArea from "./GameArea";
+import { lightTheme, darkTheme } from "../styles/theme";
 
-const App = () => {
+export default function App() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
@@ -25,6 +26,4 @@ const App = () => {
       </Router>
     </ThemeProvider>
   );
-};
-
-export default App;
+}
