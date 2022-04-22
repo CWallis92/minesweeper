@@ -1,31 +1,22 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import {
   AppBar,
-  Toolbar,
   FormControlLabel,
-  Switch,
-  makeStyles,
-  Typography,
   MenuItem,
-} from "@material-ui/core";
-import Brightness4Icon from "@material-ui/icons/Brightness4";
+  Switch,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
 
 import mine from "../assets/mine.png";
+import { ColorModeContext } from "./App";
 
-const useStyles = makeStyles({
-  darkModeSwitch: {
-    marginLeft: "auto",
-  },
-});
+const Nav = (): React.ReactElement => {
+  const colorMode = useContext(ColorModeContext);
 
-interface NavProps {
-  darkMode: boolean;
-  setDarkMode: Dispatch<SetStateAction<boolean>>;
-}
-
-const Nav = ({ darkMode, setDarkMode }: NavProps): React.ReactElement => {
-  const classes = useStyles();
+  const [darkMode, setDarkMode] = useState(false);
 
   let history = useHistory();
 
@@ -49,12 +40,15 @@ const Nav = ({ darkMode, setDarkMode }: NavProps): React.ReactElement => {
           control={
             <Switch
               checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
+              onChange={() => {
+                colorMode.toggleColorMode();
+                setDarkMode(!darkMode);
+              }}
               name="darkMode"
             />
           }
           label={<Brightness4Icon />}
-          className={classes.darkModeSwitch}
+          style={{ marginLeft: "auto" }}
         />
       </Toolbar>
     </AppBar>

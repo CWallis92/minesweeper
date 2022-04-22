@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Container, Grid, Paper, Typography } from "@material-ui/core";
+import { Container, Grid, Paper, Typography } from "@mui/material";
+import React from "react";
 
 import useStyles from "../styles/gameArea";
 import GameGrid from "./GameGrid";
@@ -19,9 +19,16 @@ const GameArea = (): React.ReactElement => {
         <Typography variant="body1">Hello</Typography>
       </Grid>
       <Grid item>
-        <Paper elevation={3} className={classes.paper}>
+        <Grid
+          container
+          rowSpacing={1}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          component={Paper}
+          className={classes.paper}
+          elevation={3}
+        >
           <GameGrid rows={9} cols={9} mines={10} />
-        </Paper>
+        </Grid>
       </Grid>
     </Grid>
   );
