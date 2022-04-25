@@ -35,8 +35,18 @@ export default function GameGrid({
     <>
       {grid.map((row, index) => {
         return (
-          <Grid item xs={6} key={index}>
-            {row.map(({ state, revealed }, i) => {
+          <Grid
+            container
+            item
+            xs={6}
+            key={index}
+            sx={{
+              flexBasis: "100% !important",
+              maxWidth: "100% !important",
+              width: "100%",
+            }}
+          >
+            {row.map(({ revealed }, i) => {
               if (!revealed) {
                 return <Item key={`${index}-${i}`}>Hi</Item>;
               }
