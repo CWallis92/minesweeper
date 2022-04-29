@@ -1,42 +1,39 @@
-import React, { createContext, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { CssBaseline, PaletteMode } from "@mui/material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import {
+  createTheme,
+  CssBaseline,
+  PaletteMode,
+  ThemeProvider,
+} from "@mui/material";
 
 import Nav from "./Nav";
 import GameArea from "./GameArea";
-import { blue, purple } from "@mui/material/colors";
-
-export const ColorModeContext = createContext({ toggleColorMode: () => {} });
+import getDesignTokens, { ColorModeContext } from "../core/theme";
 
 export default function App() {
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState<PaletteMode>(
+    (window.localStorage.getItem("darkMode") || "light") as PaletteMode
+  );
 
   const colorMode = useMemo(
     () => ({
+      currColor: (window.localStorage.getItem("darkMode") ||
+        "light") as PaletteMode,
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+        setMode((prevMode) => {
+          window.localStorage.setItem(
+            "darkMode",
+            prevMode === "light" ? "dark" : "light"
+          );
+          return prevMode === "light" ? "dark" : "light";
+        });
       },
     }),
     []
   );
 
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: mode as PaletteMode,
-          ...(mode === "light"
-            ? {
-                primary: blue,
-              }
-            : {
-                primary: purple,
-              }),
-        },
-      }),
-    [mode]
-  );
+  const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   return (
     <ColorModeContext.Provider value={colorMode}>

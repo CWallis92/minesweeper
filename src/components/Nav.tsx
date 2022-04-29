@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import {
   AppBar,
@@ -11,12 +11,12 @@ import {
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 
 import mine from "../assets/mine.png";
-import { ColorModeContext } from "./App";
+import { ColorModeContext } from "../core/theme";
 
 const Nav = (): React.ReactElement => {
   const colorMode = useContext(ColorModeContext);
 
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(colorMode.currColor === "dark");
 
   let history = useHistory();
 

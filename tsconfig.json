@@ -9,6 +9,8 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
     "skipLibCheck": true,
     "lib": [
       "dom",
