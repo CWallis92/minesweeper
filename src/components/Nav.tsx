@@ -1,8 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import {
   AppBar,
+  Container,
   FormControlLabel,
+  Grid,
   MenuItem,
   Switch,
   Toolbar,
@@ -22,35 +24,39 @@ const Nav = (): React.ReactElement => {
 
   return (
     <AppBar position="static">
-      <Toolbar>
-        <div>
-          <img
-            src={mine}
-            alt="mine"
-            style={{ width: "40px", display: "block" }}
-          />
-        </div>
-        <MenuItem onClick={() => history.push("/")}>
-          <Typography variant="h6">Play</Typography>
-        </MenuItem>
-        <MenuItem onClick={() => history.push("/hi-scores")}>
-          <Typography variant="h6">Hi-Scores</Typography>
-        </MenuItem>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={darkMode}
-              onChange={() => {
-                colorMode.toggleColorMode();
-                setDarkMode(!darkMode);
-              }}
-              name="darkMode"
+      <Container>
+        <Toolbar>
+          <div>
+            <img
+              src={mine}
+              alt="mine"
+              style={{ width: 40, display: "block", marginRight: 50 }}
             />
-          }
-          label={<Brightness4Icon />}
-          style={{ marginLeft: "auto" }}
-        />
-      </Toolbar>
+          </div>
+          <Grid container justifyContent="center">
+            <MenuItem onClick={() => history.push("/")}>
+              <Typography variant="h6">Play</Typography>
+            </MenuItem>
+            <MenuItem onClick={() => history.push("/hi-scores")}>
+              <Typography variant="h6">Hi-Scores</Typography>
+            </MenuItem>
+          </Grid>
+          <FormControlLabel
+            sx={{ marginRight: 0 }}
+            control={
+              <Switch
+                checked={darkMode}
+                onChange={() => {
+                  colorMode.toggleColorMode();
+                  setDarkMode(!darkMode);
+                }}
+                name="darkMode"
+              />
+            }
+            label={<Brightness4Icon />}
+          />
+        </Toolbar>
+      </Container>
     </AppBar>
   );
 };
