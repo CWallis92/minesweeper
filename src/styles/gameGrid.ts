@@ -1,7 +1,6 @@
 // https://mui.com/material-ui/guides/interoperability/#styled-components
 
 import { Button, styled } from "@mui/material";
-import { grey } from "@mui/material/colors";
 
 declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {

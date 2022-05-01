@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { Grid, Box, Paper } from "@mui/material";
 
-import { createBlankGrid } from "../utils/game";
+import Game from "../utils/game";
 import { GameButton } from "../styles/gameGrid";
 
 interface GameGridProps {
@@ -15,12 +15,7 @@ export default function GameGrid({
   cols,
   mines,
 }: GameGridProps): React.ReactElement {
-  const [grid, setGrid] = useState<Square[][]>([]);
-
-  useEffect(() => {
-    const initialGrid = createBlankGrid(rows, cols);
-    setGrid(initialGrid);
-  }, [cols, rows]);
+  const game = useMemo(() => new Game(rows, cols, mines), [rows, cols, mines]);
 
   return (
     <>
@@ -30,19 +25,22 @@ export default function GameGrid({
         sx={{ width: 30 * rows, margin: "auto" }}
       >
         <Grid container spacing={0} columns={cols}>
-          {grid.map((row, index) => {
-            return row.map(({ revealed }, i) => {
+          {game.grid.map((row: Square[], rowIndex) => {
+            return row.map(({ revealed }, colIndex) => {
               return revealed ? (
-                <Grid item xs={1} key={`${index}-${i}`}>
+                <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
                   <p>state</p>
                 </Grid>
               ) : (
-                <Grid item xs={1} key={`${index}-${i}`}>
+                <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
                   <GameButton
                     variant="contained"
                     color="gridButton"
                     size="small"
                     disableElevation
+                    onClick={() => {
+                      game.revealSquare(rowIndex, colIndex);
+                    }}
                   ></GameButton>
                 </Grid>
               );
