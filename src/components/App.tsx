@@ -1,25 +1,18 @@
 import React, { useMemo, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import {
-  createTheme,
-  CssBaseline,
-  PaletteMode,
-  ThemeProvider,
-} from "@mui/material";
+import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 
 import Nav from "./Nav";
 import GameArea from "./GameArea";
-import getDesignTokens, { ColorModeContext } from "../core/theme";
+import modeTheme, { ColorModeContext } from "../core/theme";
 
 export default function App() {
   const [mode, setMode] = useState<PaletteMode>(
-    (window.localStorage.getItem("darkMode") || "light") as PaletteMode
+    (window.localStorage.getItem("darkMode") as PaletteMode) || "light"
   );
 
   const colorMode = useMemo(
     () => ({
-      currColor: (window.localStorage.getItem("darkMode") ||
-        "light") as PaletteMode,
       toggleColorMode: () => {
         setMode((prevMode) => {
           window.localStorage.setItem(
@@ -33,7 +26,7 @@ export default function App() {
     []
   );
 
-  const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+  const theme = useMemo(() => modeTheme(mode), [mode]);
 
   return (
     <ColorModeContext.Provider value={colorMode}>

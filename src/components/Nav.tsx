@@ -9,6 +9,7 @@ import {
   Switch,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 
@@ -16,14 +17,13 @@ import mine from "../assets/mine.png";
 import { ColorModeContext } from "../core/theme";
 
 const Nav = (): React.ReactElement => {
+  const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
-
-  const [darkMode, setDarkMode] = useState(colorMode.currColor === "dark");
 
   let history = useHistory();
 
   return (
-    <AppBar position="static">
+    <AppBar enableColorOnDark color="primary" position="static">
       <Container>
         <Toolbar>
           <div>
@@ -45,12 +45,12 @@ const Nav = (): React.ReactElement => {
             sx={{ marginRight: 0 }}
             control={
               <Switch
-                checked={darkMode}
+                checked={theme.palette.mode === "dark"}
                 onChange={() => {
                   colorMode.toggleColorMode();
-                  setDarkMode(!darkMode);
                 }}
                 name="darkMode"
+                color="default"
               />
             }
             label={<Brightness4Icon />}

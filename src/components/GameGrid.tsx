@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Grid, styled, Box, Paper } from "@mui/material";
+import { Grid, Box, Paper } from "@mui/material";
 
 import { createBlankGrid } from "../utils/game";
-
-const Item = styled(Box)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(0.5),
-  textAlign: "center",
-  width: "30px",
-  height: "30px",
-}));
+import { GameButton } from "../styles/gameGrid";
 
 interface GameGridProps {
   rows: number;
@@ -41,12 +34,12 @@ export default function GameGrid({
           {grid.map((row, index) => {
             return row.map(({ revealed }, i) => {
               return revealed ? (
-                <Grid item xs={1} key={index}>
-                  <Item key={`${index}-${i}`}>state</Item>
+                <Grid item xs={1} key={`${index}-${i}`}>
+                  <p>state</p>
                 </Grid>
               ) : (
-                <Grid item xs={1} key={index}>
-                  <Item key={`${index}-${i}`}>Hi</Item>
+                <Grid item xs={1} key={`${index}-${i}`}>
+                  <GameButton>Hi!</GameButton>
                 </Grid>
               );
             });
