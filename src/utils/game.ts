@@ -1,77 +1,94 @@
-export default class Game {
-  readonly mines: number;
-  private started: boolean;
-  public grid: Square[][];
+// Required for sinon to check recursive function of revealSquare
+import * as utils from "./game";
 
-  constructor(rows: number, cols: number, mines: number) {
-    this.started = false;
-    this.mines = mines;
-    this.grid = this.createBlankGrid(rows, cols);
+export const createBlankGrid = (rows: number, cols: number): Square[][] =>
+  Array.from(new Array(rows), () =>
+    Array.from(new Array(cols), () => ({ value: null, revealed: false }))
+  );
+
+export const placeMines = (
+  grid: Square[][],
+  startRow: number,
+  startCol: number,
+  mines: number
+) => {
+  let minesToPlace = mines;
+
+  while (minesToPlace > 0) {
+    let row = Math.floor(Math.random() * grid.length),
+      col = Math.floor(Math.random() * grid[0].length);
+
+    while (
+      (row === startRow && col === startCol) ||
+      grid[row][col].value !== null
+    ) {
+      row = Math.floor(Math.random() * grid.length);
+      col = Math.floor(Math.random() * grid[0].length);
+    }
+
+    grid[row][col].value = "x";
+
+    minesToPlace--;
   }
+};
 
-  private createBlankGrid = (rows: number, cols: number): Square[][] => {
-    return Array.from(new Array(rows), () =>
-      Array.from(new Array(cols), () => ({ value: null, revealed: false }))
-    );
-  };
+export const placeNumbers = (grid: Square[][]) => {
+  for (let row = 0; row < grid.length; row++) {
+    for (let col = 0; col < grid[row].length; col++) {
+      if (grid[row][col].value === "x") continue;
 
-  private placeMines() {
-    let minesToPlace = this.mines;
+      // Create surrounding array
+      const neighbouringSquares = [grid[row][col - 1], grid[row][col + 1]];
+      if (!!grid[row - 1])
+        neighbouringSquares.push(
+          ...grid[row - 1].slice(Math.max(col - 1, 0), col + 2)
+        );
+      if (!!grid[row + 1])
+        neighbouringSquares.push(
+          ...grid[row + 1].slice(Math.max(col - 1, 0), col + 2)
+        );
 
-    while (minesToPlace > 0) {
-      let row = Math.floor(Math.random() * this.grid.length),
-        col = Math.floor(Math.random() * this.grid[0].length);
-
-      while (
-        this.grid[row][col].revealed ||
-        this.grid[row][col].value !== null
-      ) {
-        row = Math.floor(Math.random() * this.grid.length);
-        col = Math.floor(Math.random() * this.grid[0].length);
-      }
-
-      this.grid[row][col].value = "x";
-
-      minesToPlace--;
+      grid[row][col].value = neighbouringSquares.reduce((acc, curr) => {
+        return acc + (curr?.value === "x" ? 1 : 0);
+      }, 0);
     }
   }
+};
 
-  private placeNumbers() {
-    for (let row = 0; row < this.grid.length; row++) {
-      for (let col = 0; col < this.grid[row].length; col++) {
-        if (this.grid[row][col].value === "x") continue;
+export const fillGrid = (
+  grid: Square[][],
+  startRow: number,
+  startCol: number,
+  mines: number
+) => {
+  placeMines(grid, startRow, startCol, mines);
+  placeNumbers(grid);
+};
 
-        // Create surrounding array
-        const surroundingSquares = [
-          this.grid[row][col - 1],
-          this.grid[row][col + 1],
-        ];
-        if (!!this.grid[row - 1])
-          surroundingSquares.push(
-            ...this.grid[row - 1].slice(Math.max(col - 1, 0), col + 2)
-          );
-        if (!!this.grid[row + 1])
-          surroundingSquares.push(
-            ...this.grid[row + 1].slice(Math.max(col - 1, 0), col + 2)
-          );
+export const revealSquare = (
+  grid: Square[][],
+  startRow: number,
+  startCol: number
+) => {
+  grid[startRow][startCol].revealed = true;
 
-        this.grid[row][col].value = surroundingSquares.reduce((acc, curr) => {
-          return acc + (curr?.value === "x" ? 1 : 0);
-        }, 0);
+  if (grid[startRow][startCol].value === 0) {
+    for (let row = -1; row <= 1; row++) {
+      for (let col = -1; col <= 1; col++) {
+        if (row === 0 && col === 0) continue;
+
+        const rowCheck = startRow + row;
+        const colCheck = startCol + col;
+
+        if (
+          grid[rowCheck] &&
+          grid[rowCheck][colCheck] &&
+          !grid[rowCheck][colCheck].revealed &&
+          grid[rowCheck][colCheck].value !== "x"
+        ) {
+          utils.revealSquare(grid, rowCheck, colCheck);
+        }
       }
     }
   }
-
-  private fillGrid(startRow: number, startCol: number) {
-    this.grid[startRow][startCol].revealed = true;
-    this.placeMines();
-    this.placeNumbers();
-    this.started = true;
-  }
-
-  public revealSquare(row: number, col: number) {
-    if (!this.started) this.fillGrid(row, col);
-
-    this.grid[row][col].revealed = true;
-  }
-}
+};

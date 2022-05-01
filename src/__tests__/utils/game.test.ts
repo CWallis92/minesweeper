@@ -1,11 +1,17 @@
-import { expect } from "chai";
+import chai, { expect } from "chai";
+import Sinon from "sinon";
+import sinonChai from "sinon-chai";
 
+import * as utils from "../../utils/game";
 import {
   createBlankGrid,
   fillGrid,
   placeMines,
   placeNumbers,
+  revealSquare,
 } from "../../utils/game";
+
+chai.use(sinonChai);
 
 describe("createBlankGrid", () => {
   it("creates a single nested array", () => {
@@ -69,17 +75,16 @@ describe("placeMines", () => {
   let startingGrid: Square[][];
   beforeEach(() => {
     startingGrid = createBlankGrid(9, 9);
-    startingGrid[4][5].revealed = true;
   });
 
   it("does not place mines on the same square", () => {
-    placeMines(startingGrid, 10);
+    placeMines(startingGrid, 4, 5, 10);
     expect(
       startingGrid.flat().filter(({ value }) => value === "x").length
     ).to.equal(10);
   });
   it("does not place mines on the starting square", () => {
-    placeMines(startingGrid, 80);
+    placeMines(startingGrid, 4, 5, 80);
     expect(startingGrid[4][5].value).to.not.equal("x");
   });
 });
@@ -182,23 +187,33 @@ describe("fillGrid", () => {
     startingGrid = createBlankGrid(9, 9);
   });
 
-  it("returns a new memory item and doesn't mutate input", () => {
-    const newGrid = fillGrid(startingGrid, 0, 0, 10);
-    expect(startingGrid).to.not.equal(newGrid);
-    expect(startingGrid).to.deep.equal(createBlankGrid(9, 9));
-  });
-
-  it("assigns revealed=true to clicked square", () => {
-    const newGrid = fillGrid(startingGrid, 0, 0, 10);
-    expect(newGrid[0][0].revealed).to.be.true;
-  });
-
   it("populates every square with a non-null value", () => {
     expect(
       startingGrid.every((row) => row.every(({ value }) => value === null))
     ).to.be.true;
-    const newGrid = fillGrid(startingGrid, 0, 0, 10);
-    expect(newGrid.some((row) => row.some(({ value }) => value === null))).to.be
-      .false;
+    fillGrid(startingGrid, 0, 0, 10);
+    expect(startingGrid.some((row) => row.some(({ value }) => value === null)))
+      .to.be.false;
+  });
+});
+
+describe("revealSquare", () => {
+  it("sets revealed=true", () => {
+    const grid = createBlankGrid(9, 9);
+    fillGrid(grid, 0, 0, 10);
+    revealSquare(grid, 0, 0);
+    expect(grid[0][0].revealed).to.be.true;
+  });
+
+  it("reveals all adjacent squares", () => {
+    const grid = createBlankGrid(4, 4);
+    grid[2][2].value = "x";
+    placeNumbers(grid);
+
+    const spyReveal = Sinon.spy(utils, "revealSquare");
+
+    spyReveal(grid, 0, 0);
+
+    expect(spyReveal.callCount).to.equal(12);
   });
 });

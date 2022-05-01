@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useState } from "react";
 import { Grid, Box, Paper } from "@mui/material";
 
-import Game from "../utils/game";
 import { GameButton } from "../styles/gameGrid";
+import { createBlankGrid, fillGrid, revealSquare } from "../utils/game";
 
 interface GameGridProps {
   rows: number;
@@ -15,7 +15,26 @@ export default function GameGrid({
   cols,
   mines,
 }: GameGridProps): React.ReactElement {
-  const game = useMemo(() => new Game(rows, cols, mines), [rows, cols, mines]);
+  const [started, setStarted] = useState(false);
+  const [grid, setGrid] = useState<Square[][]>(createBlankGrid(rows, cols));
+
+  const clickSquare = useCallback(
+    (row: number, col: number) => {
+      setGrid((prevGrid) => {
+        const grid = JSON.parse(JSON.stringify(prevGrid)) as Square[][];
+
+        if (!started) {
+          fillGrid(grid, row, col, mines);
+          setStarted(true);
+        }
+
+        revealSquare(grid, row, col);
+
+        return grid;
+      });
+    },
+    [grid, mines, started]
+  );
 
   return (
     <>
@@ -25,11 +44,11 @@ export default function GameGrid({
         sx={{ width: 30 * rows, margin: "auto" }}
       >
         <Grid container spacing={0} columns={cols}>
-          {game.grid.map((row: Square[], rowIndex) => {
-            return row.map(({ revealed }, colIndex) => {
+          {grid.map((row, rowIndex) => {
+            return row.map(({ revealed, value }, colIndex) => {
               return revealed ? (
                 <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
-                  <p>state</p>
+                  {value}
                 </Grid>
               ) : (
                 <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
@@ -38,9 +57,7 @@ export default function GameGrid({
                     color="gridButton"
                     size="small"
                     disableElevation
-                    onClick={() => {
-                      game.revealSquare(rowIndex, colIndex);
-                    }}
+                    onClick={() => clickSquare(rowIndex, colIndex)}
                   ></GameButton>
                 </Grid>
               );
