@@ -39,7 +39,13 @@ export default function GameGrid({
                 </Grid>
               ) : (
                 <Grid item xs={1} key={`${index}-${i}`}>
-                  <GameButton>Hi!</GameButton>
+                  <GameButton
+                    variant="contained"
+                    color="gridButton"
+                    disableElevation
+                  >
+                    Hi!
+                  </GameButton>
                 </Grid>
               );
             });
