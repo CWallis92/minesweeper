@@ -26,7 +26,6 @@ export default function GameGrid({
     <>
       <Box
         component={Paper}
-        square
         elevation={3}
         sx={{ width: 30 * rows, margin: "auto" }}
       >
@@ -42,10 +41,9 @@ export default function GameGrid({
                   <GameButton
                     variant="contained"
                     color="gridButton"
+                    size="small"
                     disableElevation
-                  >
-                    Hi!
-                  </GameButton>
+                  ></GameButton>
                 </Grid>
               );
             });

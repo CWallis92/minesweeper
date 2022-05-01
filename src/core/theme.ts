@@ -2,11 +2,11 @@
 
 import { createContext } from "react";
 import { createTheme, PaletteMode } from "@mui/material";
-import { blue, grey, purple } from "@mui/material/colors";
+import { grey, indigo, red } from "@mui/material/colors";
 
 declare module "@mui/material" {
   interface PaletteOptions {
-    gridButton: PaletteOptions["primary"];
+    gridButton?: PaletteOptions["primary"];
   }
 }
 
@@ -18,13 +18,22 @@ const modeTheme = (mode: PaletteMode) =>
   createTheme({
     palette: {
       mode,
+      primary: indigo,
+      secondary: red,
       gridButton: {
-        main: grey[500],
-      },
-      primary: {
-        main: blue[800],
+        main: grey[400],
+        dark: grey[600],
       },
       ...(mode === "light" ? {} : {}),
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            minWidth: 0,
+          },
+        },
+      },
     },
   });
 
