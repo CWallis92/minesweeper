@@ -102,6 +102,10 @@ export const revealSquare = (
 ) => {
   grid[startRow][startCol].revealed = true;
 
+  if (grid[startRow][startCol].value === "x") {
+    grid[startRow][startCol].losingSquare = true;
+  }
+
   if (grid[startRow][startCol].value === 0) {
     for (let row = -1; row <= 1; row++) {
       for (let col = -1; col <= 1; col++) {

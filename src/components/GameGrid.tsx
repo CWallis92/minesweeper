@@ -1,7 +1,16 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { Grid, Box, Paper } from "@mui/material";
+import { red } from "@mui/material/colors";
 
 import Flag from "../assets/flag";
+import Question from "../assets/question";
+import mine from "../assets/mine.png";
 import { GameButton, SquareValue } from "../styles/gameGrid";
 import {
   createBlankGrid,
@@ -10,20 +19,22 @@ import {
   revealSquare,
   toggleFlag,
 } from "../utils/game";
-import Question from "../assets/question";
 
 interface GameGridProps {
   rows: number;
   cols: number;
   mines: number;
+  gameState: GameState;
+  setGameState: Dispatch<SetStateAction<GameState>>;
 }
 
 export default function GameGrid({
   rows,
   cols,
   mines,
+  gameState,
+  setGameState,
 }: GameGridProps): React.ReactElement {
-  const [started, setStarted] = useState(false);
   const [grid, setGrid] = useState<Square[][]>(createBlankGrid(rows, cols));
 
   const clickSquare = useCallback(
@@ -31,9 +42,9 @@ export default function GameGrid({
       setGrid((prevGrid) => {
         const grid = JSON.parse(JSON.stringify(prevGrid)) as Square[][];
 
-        if (!started) {
+        if (!gameState.started) {
           fillGrid(grid, row, col, mines);
-          setStarted(true);
+          setGameState({ ...gameState, started: true });
         }
 
         revealSquare(grid, row, col);
@@ -41,7 +52,7 @@ export default function GameGrid({
         return grid;
       });
     },
-    [mines, started]
+    [mines, gameState]
   );
 
   const setFlag = useCallback((row: number, col: number) => {
@@ -54,6 +65,14 @@ export default function GameGrid({
     });
   }, []);
 
+  useEffect(() => {
+    const boardState = grid.flat();
+
+    if (boardState.find((square) => square.revealed && square.value === "x")) {
+      setGameState({ ...gameState, ended: true, lost: true });
+    }
+  }, [grid]);
+
   return (
     <Box
       component={Paper}
@@ -62,38 +81,47 @@ export default function GameGrid({
     >
       <Grid container spacing={0} columns={cols}>
         {grid.map((row, rowIndex) => {
-          return row.map(({ revealed, value, state }, colIndex) => {
-            return revealed ? (
-              <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
-                <SquareValue
-                  sx={{
-                    color: getColor(value as number),
-                  }}
-                >
-                  {value !== 0 && value}
-                </SquareValue>
-              </Grid>
-            ) : (
-              <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
-                <GameButton
-                  variant="contained"
-                  color="gridButton"
-                  size="small"
-                  disableElevation
-                  onClick={() => {
-                    if (state !== "flagged") clickSquare(rowIndex, colIndex);
-                  }}
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    setFlag(rowIndex, colIndex);
-                  }}
-                >
-                  {state === "flagged" && <Flag />}
-                  {state === "unknown" && <Question />}
-                </GameButton>
-              </Grid>
-            );
-          });
+          return row.map(
+            ({ revealed, value, state, losingSquare }, colIndex) => {
+              return revealed ? (
+                <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
+                  <SquareValue
+                    sx={{
+                      color: getColor(value as number),
+                      backgroundColor: losingSquare ? red[500] : null,
+                    }}
+                  >
+                    {value !== "x" && state === "flagged" && revealed && (
+                      <Flag />
+                    )}
+                    {value !== 0 && value !== "x" && value}
+                    {value === "x" && (
+                      <img src={mine} alt="mine" style={{ width: "100%" }} />
+                    )}
+                  </SquareValue>
+                </Grid>
+              ) : (
+                <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
+                  <GameButton
+                    variant="contained"
+                    color="gridButton"
+                    size="small"
+                    disableElevation
+                    onClick={() => {
+                      if (state !== "flagged") clickSquare(rowIndex, colIndex);
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      setFlag(rowIndex, colIndex);
+                    }}
+                  >
+                    {state === "flagged" && <Flag />}
+                    {state === "unknown" && <Question />}
+                  </GameButton>
+                </Grid>
+              );
+            }
+          );
         })}
       </Grid>
     </Box>
