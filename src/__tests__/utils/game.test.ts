@@ -93,7 +93,7 @@ describe("placeNumbers", () => {
   it("replaces all null values in the grid", () => {
     const startingGrid = createBlankGrid(9, 9);
     startingGrid[4][5].revealed = true;
-    placeMines(startingGrid, 10);
+    placeMines(startingGrid, 4, 5, 10);
     placeNumbers(startingGrid);
     expect(startingGrid.flat().some(({ value }) => value === null)).to.be.false;
   });

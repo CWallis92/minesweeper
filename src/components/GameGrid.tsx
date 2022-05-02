@@ -1,8 +1,16 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { Grid, Box, Paper } from "@mui/material";
 
-import { GameButton } from "../styles/gameGrid";
-import { createBlankGrid, fillGrid, revealSquare } from "../utils/game";
+import Flag from "../assets/flag";
+import { GameButton, SquareValue } from "../styles/gameGrid";
+import {
+  createBlankGrid,
+  fillGrid,
+  getColor,
+  revealSquare,
+  toggleFlag,
+} from "../utils/game";
+import Question from "../assets/question";
 
 interface GameGridProps {
   rows: number;
@@ -33,38 +41,61 @@ export default function GameGrid({
         return grid;
       });
     },
-    [grid, mines, started]
+    [mines, started]
   );
 
+  const setFlag = useCallback((row: number, col: number) => {
+    setGrid((prevGrid) => {
+      const grid = JSON.parse(JSON.stringify(prevGrid)) as Square[][];
+
+      toggleFlag(grid, row, col);
+
+      return grid;
+    });
+  }, []);
+
   return (
-    <>
-      <Box
-        component={Paper}
-        elevation={3}
-        sx={{ width: 30 * rows, margin: "auto" }}
-      >
-        <Grid container spacing={0} columns={cols}>
-          {grid.map((row, rowIndex) => {
-            return row.map(({ revealed, value }, colIndex) => {
-              return revealed ? (
-                <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
-                  {value}
-                </Grid>
-              ) : (
-                <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
-                  <GameButton
-                    variant="contained"
-                    color="gridButton"
-                    size="small"
-                    disableElevation
-                    onClick={() => clickSquare(rowIndex, colIndex)}
-                  ></GameButton>
-                </Grid>
-              );
-            });
-          })}
-        </Grid>
-      </Box>
-    </>
+    <Box
+      component={Paper}
+      elevation={3}
+      sx={{ width: 30 * rows, margin: "auto" }}
+    >
+      <Grid container spacing={0} columns={cols}>
+        {grid.map((row, rowIndex) => {
+          return row.map(({ revealed, value, state }, colIndex) => {
+            return revealed ? (
+              <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
+                <SquareValue
+                  sx={{
+                    color: getColor(value as number),
+                  }}
+                >
+                  {value !== 0 && value}
+                </SquareValue>
+              </Grid>
+            ) : (
+              <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
+                <GameButton
+                  variant="contained"
+                  color="gridButton"
+                  size="small"
+                  disableElevation
+                  onClick={() => {
+                    if (state !== "flagged") clickSquare(rowIndex, colIndex);
+                  }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    setFlag(rowIndex, colIndex);
+                  }}
+                >
+                  {state === "flagged" && <Flag />}
+                  {state === "unknown" && <Question />}
+                </GameButton>
+              </Grid>
+            );
+          });
+        })}
+      </Grid>
+    </Box>
   );
 }

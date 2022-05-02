@@ -21,10 +21,22 @@ const modeTheme = (mode: PaletteMode) =>
       primary: indigo,
       secondary: red,
       gridButton: {
-        main: grey[400],
+        main: grey[500],
         dark: grey[600],
       },
-      ...(mode === "light" ? {} : {}),
+      ...(mode === "light"
+        ? {
+            background: {
+              default: "#f5f5f5",
+              paper: "#fff",
+            },
+          }
+        : {
+            background: {
+              default: "#303030",
+              paper: "#424242",
+            },
+          }),
     },
     components: {
       MuiButton: {

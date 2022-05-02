@@ -1,5 +1,35 @@
 // Required for sinon to check recursive function of revealSquare
+import {
+  blue,
+  brown,
+  cyan,
+  deepPurple,
+  green,
+  purple,
+  red,
+} from "@mui/material/colors";
 import * as utils from "./game";
+
+export const getColor = (num: number) => {
+  switch (num) {
+    case 1:
+      return blue[500];
+    case 2:
+      return green[500];
+    case 3:
+      return red[500];
+    case 4:
+      return purple[500];
+    case 5:
+      return deepPurple[500];
+    case 6:
+      return cyan[500];
+    case 7:
+      return brown[500];
+    default:
+      return null;
+  }
+};
 
 export const createBlankGrid = (rows: number, cols: number): Square[][] =>
   Array.from(new Array(rows), () =>
@@ -90,5 +120,19 @@ export const revealSquare = (
         }
       }
     }
+  }
+};
+
+export const toggleFlag = (grid: Square[][], row: number, col: number) => {
+  switch (grid[row][col].state) {
+    case "flagged":
+      grid[row][col].state = "unknown";
+      break;
+    case "unknown":
+      grid[row][col].state = null;
+      break;
+    default:
+      grid[row][col].state = "flagged";
+      break;
   }
 };

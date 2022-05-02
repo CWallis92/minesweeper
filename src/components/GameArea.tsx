@@ -7,7 +7,7 @@ const GameArea = (): React.ReactElement => {
   return (
     <main>
       <Container>
-        <GameGrid rows={4} cols={4} mines={1} />
+        <GameGrid rows={9} cols={9} mines={10} />
       </Container>
     </main>
   );
