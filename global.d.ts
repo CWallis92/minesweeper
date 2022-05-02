@@ -10,5 +10,8 @@ interface GameState {
   ended: boolean;
   won: boolean;
   lost: boolean;
+  rows: number;
+  cols: number;
+  mines: number;
   flagsRemaining: number;
 }

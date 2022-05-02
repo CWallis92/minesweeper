@@ -1,6 +1,13 @@
 import React from "react";
+import { grey } from "@mui/material/colors";
 
-export default function Flag(): React.ReactElement {
+interface FlagProps {
+  crossed?: boolean;
+}
+
+export default function Flag({
+  crossed = false,
+}: FlagProps): React.ReactElement {
   return (
     <svg
       version="1.1"
@@ -12,9 +19,17 @@ export default function Flag(): React.ReactElement {
     >
       <polygon fill="#CC4B4C" points="52,23.5 10,40 10,22 10,4 " />
       <path
-        fill="#424A60"
+        fill={grey[900]}
         d="M9,0C8.448,0,8,0.447,8,1v3v55c0,0.553,0.448,1,1,1s1-0.447,1-1V4V1C10,0.447,9.552,0,9,0z"
       />
+      {crossed && (
+        <g transform="scale(2.5)">
+          <path
+            fill-rule="evenodd"
+            d="M5.72 5.72a.75.75 0 011.06 0L12 10.94l5.22-5.22a.75.75 0 111.06 1.06L13.06 12l5.22 5.22a.75.75 0 11-1.06 1.06L12 13.06l-5.22 5.22a.75.75 0 01-1.06-1.06L10.94 12 5.72 6.78a.75.75 0 010-1.06z"
+          />
+        </g>
+      )}
     </svg>
   );
 }
