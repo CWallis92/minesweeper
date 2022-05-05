@@ -1,7 +1,8 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Container } from "@mui/material";
 
 import GameGrid from "./GameGrid";
+import { GameDetails } from "../styles/gameArea";
 
 const GameArea = (): React.ReactElement => {
   const [shake, setShake] = useState(false);
@@ -16,6 +17,8 @@ const GameArea = (): React.ReactElement => {
     flagsRemaining: 0,
   });
 
+  const gameGrid = useRef<HTMLDivElement>();
+
   const flagError = useCallback(() => {
     setShake(true);
     setTimeout(() => setShake(false), 500);
@@ -23,11 +26,14 @@ const GameArea = (): React.ReactElement => {
 
   return (
     <main>
-      <p className={shake ? "shake" : undefined}>
-        Flags remaining: {gameState.mines - gameState.flagsRemaining}
-      </p>
       <Container>
+        <GameDetails style={{ width: gameGrid?.current?.clientWidth }}>
+          <p className={shake ? "shake" : undefined}>
+            Flags remaining: {gameState.mines - gameState.flagsRemaining}
+          </p>
+        </GameDetails>
         <GameGrid
+          ref={gameGrid}
           gameState={gameState}
           setGameState={setGameState}
           flagError={flagError}
