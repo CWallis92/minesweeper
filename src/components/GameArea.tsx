@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState } from "react";
-import { Container } from "@mui/material";
+import { Box, Container, Grid, Paper } from "@mui/material";
 
 import GameGrid from "./GameGrid";
-import { GameDetails } from "../styles/gameArea";
+import GameDetails from "./GameDetails";
 
 const GameArea = (): React.ReactElement => {
   const [shake, setShake] = useState(false);
@@ -27,11 +27,7 @@ const GameArea = (): React.ReactElement => {
   return (
     <main>
       <Container>
-        <GameDetails style={{ width: gameGrid?.current?.clientWidth }}>
-          <p className={shake ? "shake" : undefined}>
-            Flags remaining: {gameState.mines - gameState.flagsRemaining}
-          </p>
-        </GameDetails>
+        <GameDetails gameGrid={gameGrid} gameState={gameState} />
         <GameGrid
           ref={gameGrid}
           gameState={gameState}
