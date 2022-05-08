@@ -5,14 +5,26 @@ interface Square {
   losingSquare?: boolean;
 }
 
-interface GameState {
-  difficulty: "easy" | "medium" | "hard" | null;
+type Difficulty = "easy" | "medium" | "hard";
+
+interface GameNotStarted {
+  difficulty: null;
   started: boolean;
   ended: boolean;
   won: boolean;
   lost: boolean;
-  rows?: number;
-  cols?: number;
-  mines?: number;
-  flagsRemaining?: number;
 }
+
+interface GameInProgress {
+  difficulty: Difficulty;
+  started: boolean;
+  ended: boolean;
+  won: boolean;
+  lost: boolean;
+  rows: number;
+  cols: number;
+  mines: number;
+  flagsRemaining: number;
+}
+
+type GameState = GameInProgress | GameNotStarted;

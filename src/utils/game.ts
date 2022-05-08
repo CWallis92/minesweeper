@@ -10,6 +10,12 @@ import {
 } from "@mui/material/colors";
 import * as utils from "./game";
 
+export const isInProgress = (
+  gameState: GameState
+): gameState is GameInProgress => {
+  return gameState.hasOwnProperty("rows");
+};
+
 export const getColor = (num: number) => {
   switch (num) {
     case 1:

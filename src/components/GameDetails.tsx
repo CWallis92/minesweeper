@@ -11,7 +11,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { GameContext } from "../core/context";
 import { Div, MenuButton } from "../styles/gameDetails";
-import { createBlankGrid } from "../utils/game";
+import { createBlankGrid, isInProgress } from "../utils/game";
 
 interface GameDetailsProps {
   gameGrid: any;
@@ -37,6 +37,8 @@ export default function GameDetails({
   });
 
   const restartGame = () => {
+    if (!isInProgress(gameState)) return;
+
     setGameState({
       ...gameState,
       started: false,
@@ -45,7 +47,7 @@ export default function GameDetails({
       lost: false,
     });
 
-    setGrid(createBlankGrid(gameState.rows!, gameState.cols!));
+    setGrid(createBlankGrid(gameState.rows, gameState.cols));
 
     setTime(0);
   };
@@ -59,6 +61,8 @@ export default function GameDetails({
       lost: false,
     });
   };
+
+  if (!isInProgress(gameState)) return <></>;
 
   return (
     <Div style={{ width: gameGrid?.current?.clientWidth }}>
@@ -74,7 +78,7 @@ export default function GameDetails({
             }}
             className={shake ? "shake" : undefined}
           >
-            {gameState.mines! - gameState.flagsRemaining!}
+            {gameState.mines - gameState.flagsRemaining}
           </Box>
         </Grid>
         <Grid item>

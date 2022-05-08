@@ -14,7 +14,13 @@ import Question from "../assets/question";
 import mine from "../assets/mine.png";
 import { GameContext } from "../core/context";
 import { GameButton, SquareValue } from "../styles/gameGrid";
-import { fillGrid, getColor, revealSquare, toggleFlag } from "../utils/game";
+import {
+  fillGrid,
+  getColor,
+  isInProgress,
+  revealSquare,
+  toggleFlag,
+} from "../utils/game";
 
 interface GameGridProps {
   flagError: () => void;
@@ -31,7 +37,7 @@ const GameGrid = forwardRef(
         setGrid((prevGrid) => {
           const grid = JSON.parse(JSON.stringify(prevGrid)) as Square[][];
 
-          if (!gameState.started) {
+          if (isInProgress(gameState) && !gameState.started) {
             fillGrid(grid, row, col, gameState.mines || 0);
             setGameState({ ...gameState, started: true });
           }
@@ -46,11 +52,13 @@ const GameGrid = forwardRef(
 
     const setFlag = useCallback(
       (row: number, col: number) => {
+        if (!isInProgress(gameState)) return;
+
         setGrid((prevGrid) => {
           const grid = JSON.parse(JSON.stringify(prevGrid)) as Square[][];
 
           if (
-            gameState.flagsRemaining! >= gameState.mines! &&
+            gameState.flagsRemaining >= gameState.mines &&
             !grid[row][col].state
           ) {
             flagError();
@@ -65,6 +73,8 @@ const GameGrid = forwardRef(
     );
 
     useEffect(() => {
+      if (!isInProgress(gameState)) return;
+
       const boardState = grid.flat();
 
       const flagsRemaining = boardState.filter(
@@ -82,8 +92,8 @@ const GameGrid = forwardRef(
 
       if (
         boardState.filter(({ revealed }) => revealed).length +
-          gameState.mines! ===
-        gameState.rows! * gameState.cols!
+          gameState.mines ===
+        gameState.rows * gameState.cols
       ) {
         ended = true;
         won = true;
@@ -92,19 +102,21 @@ const GameGrid = forwardRef(
       setGameState({ ...gameState, ended, won, lost, flagsRemaining });
     }, [grid]);
 
+    if (!isInProgress(gameState)) return <></>;
+
     return (
       <>
         <Box
           ref={ref}
           component={Paper}
           elevation={3}
-          sx={{ width: 30 * gameState.rows!, margin: "auto" }}
+          sx={{ width: 30 * gameState.rows, margin: "auto" }}
         >
-          <Grid container spacing={0} columns={gameState.cols}>
-            {grid.map((row, rowIndex) => {
-              return row.map(
-                ({ revealed, value, state, losingSquare }, colIndex) => {
-                  return revealed || gameState.ended ? (
+          <Grid container spacing={0} flexDirection="column">
+            {grid.map((row, rowIndex) => (
+              <Grid container item>
+                {row.map(({ revealed, value, state, losingSquare }, colIndex) =>
+                  revealed || gameState.ended ? (
                     <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
                       <SquareValue
                         sx={{
@@ -156,10 +168,10 @@ const GameGrid = forwardRef(
                         {state === "unknown" && <Question />}
                       </GameButton>
                     </Grid>
-                  );
-                }
-              );
-            })}
+                  )
+                )}
+              </Grid>
+            ))}
           </Grid>
         </Box>
       </>

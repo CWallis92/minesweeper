@@ -1,6 +1,12 @@
 import React, { useMemo, useState } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Button, CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
+import {
+  Button,
+  Container,
+  CssBaseline,
+  Grid,
+  PaletteMode,
+  ThemeProvider,
+} from "@mui/material";
 
 import Nav from "./Nav";
 import GameArea from "./GameArea";
@@ -36,14 +42,34 @@ export default function App() {
 
   const theme = useMemo(() => modeTheme(mode), [mode]);
 
-  const startGame = () => {
+  const startGame = (difficulty: Difficulty) => {
+    let rows, cols, mines;
+
+    switch (difficulty) {
+      case "medium":
+        rows = 16;
+        cols = 16;
+        mines = 40;
+        break;
+      case "hard":
+        rows = 30;
+        cols = 16;
+        mines = 99;
+        break;
+      default:
+        rows = 9;
+        cols = 9;
+        mines = 10;
+        break;
+    }
+
     setGameState({
       ...gameState,
-      difficulty: "easy",
-      rows: 9,
-      cols: 9,
-      mines: 10,
-      flagsRemaining: 10,
+      difficulty,
+      rows,
+      cols,
+      mines,
+      flagsRemaining: mines,
     });
   };
 
@@ -53,12 +79,47 @@ export default function App() {
         <GameContext.Provider value={{ gameState, setGameState }}>
           <CssBaseline />
           <Nav />
-          {gameState.difficulty !== null ? (
-            <GameArea />
-          ) : (
-            <Button onClick={startGame}>Start game</Button>
-          )}
-          {gameState.ended && <p>Ended</p>}
+          <main>
+            <Container>
+              {gameState.difficulty !== null ? (
+                <GameArea />
+              ) : (
+                <Grid
+                  container
+                  justifyContent="space-around"
+                  sx={{ width: 450, maxWidth: "90%", margin: "auto" }}
+                >
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => startGame("easy")}
+                    >
+                      Easy
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => startGame("medium")}
+                    >
+                      Medium
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => startGame("hard")}
+                    >
+                      Hard
+                    </Button>
+                  </Grid>
+                </Grid>
+              )}
+            </Container>
+          </main>
         </GameContext.Provider>
       </ThemeProvider>
     </ColorModeContext.Provider>
