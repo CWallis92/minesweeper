@@ -1,6 +1,5 @@
 // https://bareynol.github.io/mui-theme-creator/
 
-import { createContext } from "react";
 import { createTheme, PaletteMode } from "@mui/material";
 import { grey, indigo, red } from "@mui/material/colors";
 
@@ -9,10 +8,6 @@ declare module "@mui/material" {
     gridButton?: PaletteOptions["primary"];
   }
 }
-
-export const ColorModeContext = createContext({
-  toggleColorMode: () => {},
-});
 
 const modeTheme = (mode: PaletteMode) =>
   createTheme({
@@ -46,6 +41,9 @@ const modeTheme = (mode: PaletteMode) =>
           },
         },
       },
+    },
+    typography: {
+      fontFamily: "Oxanium",
     },
   });
 

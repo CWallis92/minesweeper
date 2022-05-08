@@ -1,26 +1,21 @@
 import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
 import {
   AppBar,
   Container,
   FormControlLabel,
   Grid,
-  MenuItem,
   Switch,
   Toolbar,
-  Typography,
   useTheme,
 } from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 
 import mine from "../assets/mine.png";
-import { ColorModeContext } from "../core/theme";
+import { ColorModeContext } from "../core/context";
 
 const Nav = (): React.ReactElement => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
-
-  let history = useHistory();
 
   return (
     <AppBar enableColorOnDark color="primary" position="static">
@@ -34,12 +29,7 @@ const Nav = (): React.ReactElement => {
             />
           </div>
           <Grid container justifyContent="center">
-            <MenuItem onClick={() => history.push("/")}>
-              <Typography variant="h6">Play</Typography>
-            </MenuItem>
-            <MenuItem onClick={() => history.push("/hi-scores")}>
-              <Typography variant="h6">Hi-Scores</Typography>
-            </MenuItem>
+            <h1>Minesweeper</h1>
           </Grid>
           <FormControlLabel
             sx={{ marginRight: 0 }}

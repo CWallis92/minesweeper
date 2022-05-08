@@ -1,11 +1,10 @@
 import React, {
   Dispatch,
   forwardRef,
-  Ref,
   SetStateAction,
   useCallback,
+  useContext,
   useEffect,
-  useState,
 } from "react";
 import { Grid, Box, Paper } from "@mui/material";
 import { red } from "@mui/material/colors";
@@ -13,30 +12,19 @@ import { red } from "@mui/material/colors";
 import Flag from "../assets/flag";
 import Question from "../assets/question";
 import mine from "../assets/mine.png";
+import { GameContext } from "../core/context";
 import { GameButton, SquareValue } from "../styles/gameGrid";
-import {
-  createBlankGrid,
-  fillGrid,
-  getColor,
-  revealSquare,
-  toggleFlag,
-} from "../utils/game";
+import { fillGrid, getColor, revealSquare, toggleFlag } from "../utils/game";
 
 interface GameGridProps {
-  ref: Ref<HTMLDivElement>;
-  gameState: GameState;
-  setGameState: Dispatch<SetStateAction<GameState>>;
   flagError: () => void;
+  grid: Square[][];
+  setGrid: Dispatch<SetStateAction<Square[][]>>;
 }
 
 const GameGrid = forwardRef(
-  (
-    { gameState, setGameState, flagError }: GameGridProps,
-    ref
-  ): React.ReactElement => {
-    const [grid, setGrid] = useState<Square[][]>(
-      createBlankGrid(gameState.rows, gameState.cols)
-    );
+  ({ flagError, grid, setGrid }: GameGridProps, ref): React.ReactElement => {
+    const { gameState, setGameState } = useContext(GameContext);
 
     const clickSquare = useCallback(
       (row: number, col: number) => {
@@ -44,7 +32,7 @@ const GameGrid = forwardRef(
           const grid = JSON.parse(JSON.stringify(prevGrid)) as Square[][];
 
           if (!gameState.started) {
-            fillGrid(grid, row, col, gameState.mines);
+            fillGrid(grid, row, col, gameState.mines || 0);
             setGameState({ ...gameState, started: true });
           }
 
@@ -62,7 +50,7 @@ const GameGrid = forwardRef(
           const grid = JSON.parse(JSON.stringify(prevGrid)) as Square[][];
 
           if (
-            gameState.flagsRemaining >= gameState.mines &&
+            gameState.flagsRemaining! >= gameState.mines! &&
             !grid[row][col].state
           ) {
             flagError();
@@ -94,8 +82,8 @@ const GameGrid = forwardRef(
 
       if (
         boardState.filter(({ revealed }) => revealed).length +
-          gameState.mines ===
-        gameState.rows * gameState.cols
+          gameState.mines! ===
+        gameState.rows! * gameState.cols!
       ) {
         ended = true;
         won = true;
@@ -110,7 +98,7 @@ const GameGrid = forwardRef(
           ref={ref}
           component={Paper}
           elevation={3}
-          sx={{ width: 30 * gameState.rows, margin: "auto" }}
+          sx={{ width: 30 * gameState.rows!, margin: "auto" }}
         >
           <Grid container spacing={0} columns={gameState.cols}>
             {grid.map((row, rowIndex) => {

@@ -6,12 +6,13 @@ interface Square {
 }
 
 interface GameState {
+  difficulty: "easy" | "medium" | "hard" | null;
   started: boolean;
   ended: boolean;
   won: boolean;
   lost: boolean;
-  rows: number;
-  cols: number;
-  mines: number;
-  flagsRemaining: number;
+  rows?: number;
+  cols?: number;
+  mines?: number;
+  flagsRemaining?: number;
 }

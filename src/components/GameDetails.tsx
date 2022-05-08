@@ -1,15 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { Box, Grid, Paper } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-import { Div, RestartButton } from "../styles/gameDetails";
+import { GameContext } from "../core/context";
+import { Div, MenuButton } from "../styles/gameDetails";
+import { createBlankGrid } from "../utils/game";
 
 interface GameDetailsProps {
   gameGrid: any;
-  gameState: GameState;
+  shake: boolean;
+  setGrid: Dispatch<SetStateAction<Square[][]>>;
 }
 
-export default function GameDetails({ gameGrid, gameState }: GameDetailsProps) {
+export default function GameDetails({
+  gameGrid,
+  shake,
+  setGrid,
+}: GameDetailsProps) {
+  const { gameState, setGameState } = useContext(GameContext);
+
   const [time, setTime] = useState(0);
 
   useEffect(() => {
@@ -19,6 +35,30 @@ export default function GameDetails({ gameGrid, gameState }: GameDetailsProps) {
       setTime(time + 10);
     }, 10);
   });
+
+  const restartGame = () => {
+    setGameState({
+      ...gameState,
+      started: false,
+      ended: false,
+      won: false,
+      lost: false,
+    });
+
+    setGrid(createBlankGrid(gameState.rows!, gameState.cols!));
+
+    setTime(0);
+  };
+
+  const exitGame = () => {
+    setGameState({
+      difficulty: null,
+      started: false,
+      ended: false,
+      won: false,
+      lost: false,
+    });
+  };
 
   return (
     <Div style={{ width: gameGrid?.current?.clientWidth }}>
@@ -32,18 +72,20 @@ export default function GameDetails({ gameGrid, gameState }: GameDetailsProps) {
               width: 45,
               height: 45,
             }}
+            className={shake ? "shake" : undefined}
           >
-            {gameState.mines - gameState.flagsRemaining}
+            {gameState.mines! - gameState.flagsRemaining!}
           </Box>
         </Grid>
         <Grid item>
-          <RestartButton
-            variant="contained"
-            color="primary"
-            onClick={() => console.log("Reset")}
-          >
+          <MenuButton variant="contained" color="primary" onClick={exitGame}>
+            <ArrowBackIcon sx={{ width: "100%" }} />
+          </MenuButton>
+        </Grid>
+        <Grid item>
+          <MenuButton variant="contained" color="primary" onClick={restartGame}>
             <RestartAltIcon sx={{ width: "100%" }} />
-          </RestartButton>
+          </MenuButton>
         </Grid>
         <Grid item>
           <Box
