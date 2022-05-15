@@ -105,76 +105,69 @@ const GameGrid = forwardRef(
     if (!isInProgress(gameState)) return <></>;
 
     return (
-      <>
-        <Box
-          ref={ref}
-          component={Paper}
-          elevation={3}
-          sx={{ width: 30 * gameState.rows, margin: "auto" }}
-        >
-          <Grid container spacing={0} flexDirection="column">
-            {grid.map((row, rowIndex) => (
-              <Grid container item>
-                {row.map(({ revealed, value, state, losingSquare }, colIndex) =>
-                  revealed || gameState.ended ? (
-                    <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
-                      <SquareValue
-                        sx={{
-                          color: getColor(value as number),
-                          backgroundColor: losingSquare ? red[500] : null,
-                        }}
-                      >
-                        {value !== 0 && value !== "x" && (
-                          <>
-                            {state === "flagged" && gameState.ended ? (
-                              <Flag crossed />
-                            ) : (
-                              value
-                            )}
-                          </>
+      <Box
+        ref={ref}
+        component={Paper}
+        elevation={3}
+        sx={{ width: 30 * gameState.cols, margin: "auto" }}
+      >
+        {grid.map((row, rowIndex) => (
+          <Grid container key={`${rowIndex}`}>
+            {row.map(({ revealed, value, state, losingSquare }, colIndex) => (
+              <Grid item key={`${rowIndex}-${colIndex}`}>
+                {revealed || gameState.ended ? (
+                  <SquareValue
+                    sx={{
+                      color: getColor(value as number),
+                      backgroundColor: losingSquare ? red[500] : null,
+                    }}
+                  >
+                    {value !== 0 && value !== "x" && (
+                      <>
+                        {state === "flagged" && gameState.ended ? (
+                          <Flag crossed />
+                        ) : (
+                          value
                         )}
-                        {value === "x" && (
-                          <>
-                            {gameState.won ? (
-                              <Flag />
-                            ) : (
-                              <img
-                                src={mine}
-                                alt="mine"
-                                style={{ width: "100%" }}
-                              />
-                            )}
-                          </>
+                      </>
+                    )}
+                    {value === "x" && (
+                      <>
+                        {gameState.won ? (
+                          <Flag />
+                        ) : (
+                          <img
+                            src={mine}
+                            alt="mine"
+                            style={{ width: "100%" }}
+                          />
                         )}
-                      </SquareValue>
-                    </Grid>
-                  ) : (
-                    <Grid item xs={1} key={`${rowIndex}-${colIndex}`}>
-                      <GameButton
-                        variant="contained"
-                        color="gridButton"
-                        size="small"
-                        disableElevation
-                        onClick={() => {
-                          if (state !== "flagged")
-                            clickSquare(rowIndex, colIndex);
-                        }}
-                        onContextMenu={(e) => {
-                          e.preventDefault();
-                          setFlag(rowIndex, colIndex);
-                        }}
-                      >
-                        {state === "flagged" && <Flag />}
-                        {state === "unknown" && <Question />}
-                      </GameButton>
-                    </Grid>
-                  )
+                      </>
+                    )}
+                  </SquareValue>
+                ) : (
+                  <GameButton
+                    variant="contained"
+                    color="gridButton"
+                    size="small"
+                    disableElevation
+                    onClick={() => {
+                      if (state !== "flagged") clickSquare(rowIndex, colIndex);
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      setFlag(rowIndex, colIndex);
+                    }}
+                  >
+                    {state === "flagged" && <Flag />}
+                    {state === "unknown" && <Question />}
+                  </GameButton>
                 )}
               </Grid>
             ))}
           </Grid>
-        </Box>
-      </>
+        ))}
+      </Box>
     );
   }
 );

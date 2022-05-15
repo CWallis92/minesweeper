@@ -52,8 +52,8 @@ export default function App() {
         mines = 40;
         break;
       case "hard":
-        rows = 30;
-        cols = 16;
+        rows = 16;
+        cols = 30;
         mines = 99;
         break;
       default:
