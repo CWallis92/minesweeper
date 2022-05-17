@@ -2,12 +2,6 @@
 
 import { Box, Button, styled } from "@mui/material";
 
-declare module "@mui/material/Button" {
-  interface ButtonPropsColorOverrides {
-    gridButton: true;
-  }
-}
-
 export const GameButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(0.5),
   textAlign: "center",

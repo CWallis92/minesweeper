@@ -89,9 +89,9 @@ const HiScores = (): React.ReactElement => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {scores.map(({ name, time }) => {
+            {scores.map(({ name, time }, index) => {
               return (
-                <StyledTableRow>
+                <StyledTableRow key={index}>
                   <StyledTableCell component="th" scope="row">
                     {name}
                   </StyledTableCell>

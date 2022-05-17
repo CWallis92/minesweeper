@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Button,
   Container,
@@ -13,6 +13,7 @@ import GameArea from "./GameArea";
 import modeTheme from "../core/theme";
 import { ColorModeContext, GameContext } from "../core/context";
 import HiScores from "./HiScores";
+import WinModal from "./WinModal";
 
 export default function App() {
   const [mode, setMode] = useState<PaletteMode>(
@@ -25,6 +26,7 @@ export default function App() {
     won: false,
     lost: false,
   });
+  const [winModal, setWinModal] = useState(true);
 
   const colorMode = useMemo(
     () => ({
@@ -74,6 +76,10 @@ export default function App() {
     });
   };
 
+  useEffect(() => {
+    if (gameState.won) setWinModal(true);
+  }, [gameState]);
+
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -121,6 +127,7 @@ export default function App() {
               )}
               <HiScores />
             </Container>
+            {winModal && <WinModal setWinModal={setWinModal} />}
           </main>
         </GameContext.Provider>
       </ThemeProvider>

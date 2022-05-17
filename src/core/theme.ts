@@ -1,11 +1,19 @@
 // https://bareynol.github.io/mui-theme-creator/
 
 import { createTheme, PaletteMode } from "@mui/material";
-import { blue, blueGrey, grey, indigo } from "@mui/material/colors";
+import "@mui/material/Button";
+import "@mui/material/TextField";
+import { blue, blueGrey, grey, indigo, purple } from "@mui/material/colors";
 
 declare module "@mui/material" {
   interface PaletteOptions {
     gridButton: PaletteOptions["primary"];
+  }
+}
+
+declare module "@mui/material/Button" {
+  interface ButtonPropsColorOverrides {
+    gridButton: true;
   }
 }
 
