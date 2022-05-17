@@ -20,7 +20,7 @@ const Nav = (): React.ReactElement => {
   return (
     <AppBar enableColorOnDark color="primary" position="static">
       <Container>
-        <Toolbar>
+        <Toolbar sx={{ padding: "0 !important" }}>
           <div>
             <img
               src={mine}

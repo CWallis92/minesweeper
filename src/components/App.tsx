@@ -12,6 +12,7 @@ import Nav from "./Nav";
 import GameArea from "./GameArea";
 import modeTheme from "../core/theme";
 import { ColorModeContext, GameContext } from "../core/context";
+import HiScores from "./HiScores";
 
 export default function App() {
   const [mode, setMode] = useState<PaletteMode>(
@@ -92,7 +93,7 @@ export default function App() {
                   <Grid item>
                     <Button
                       variant="contained"
-                      color="secondary"
+                      color="primary"
                       onClick={() => startGame("easy")}
                     >
                       Easy
@@ -101,7 +102,7 @@ export default function App() {
                   <Grid item>
                     <Button
                       variant="contained"
-                      color="secondary"
+                      color="primary"
                       onClick={() => startGame("medium")}
                     >
                       Medium
@@ -110,7 +111,7 @@ export default function App() {
                   <Grid item>
                     <Button
                       variant="contained"
-                      color="secondary"
+                      color="primary"
                       onClick={() => startGame("hard")}
                     >
                       Hard
@@ -118,6 +119,7 @@ export default function App() {
                   </Grid>
                 </Grid>
               )}
+              <HiScores />
             </Container>
           </main>
         </GameContext.Provider>

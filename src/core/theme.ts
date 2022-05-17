@@ -1,11 +1,11 @@
 // https://bareynol.github.io/mui-theme-creator/
 
 import { createTheme, PaletteMode } from "@mui/material";
-import { blueGrey, grey, indigo } from "@mui/material/colors";
+import { blue, blueGrey, grey, indigo } from "@mui/material/colors";
 
 declare module "@mui/material" {
   interface PaletteOptions {
-    gridButton?: PaletteOptions["primary"];
+    gridButton: PaletteOptions["primary"];
   }
 }
 
@@ -13,7 +13,7 @@ const modeTheme = (mode: PaletteMode) =>
   createTheme({
     palette: {
       mode,
-      primary: indigo,
+      primary: mode === "light" ? blue : indigo,
       secondary: blueGrey,
       gridButton: {
         main: grey[500],

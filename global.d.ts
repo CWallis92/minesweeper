@@ -28,3 +28,8 @@ interface GameInProgress {
 }
 
 type GameState = GameInProgress | GameNotStarted;
+
+interface Score {
+  name: string;
+  time: number;
+}
