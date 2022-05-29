@@ -2,8 +2,6 @@
   "name": "minesweeper-server",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
-  "main": "dist/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/app.ts"

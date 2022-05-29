@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "target": "es2016",
-    "module": "ESNext",
+    "module": "commonjs",
     "allowJs": true,
     "checkJs": true,
-    "outDir": "./build",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -25,8 +25,5 @@
   },
   "include": [
     "src"
-  ],
-  "ts-node": {
-    "esm": true
-  }
+  ]
 }
