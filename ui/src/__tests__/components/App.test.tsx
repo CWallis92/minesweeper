@@ -4,9 +4,9 @@ import { render, screen } from "@testing-library/react";
 
 import App from "../../components/App";
 
-test("renders Hello", () => {
+test("renders Minesweeper", () => {
   render(<App />);
 
-  const linkElement = screen.getByText(/hello/i);
+  const linkElement = screen.getByText(/Minesweeper/i);
   expect(linkElement).toBeInTheDocument();
 });
